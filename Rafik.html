@@ -1,0 +1,1465 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="رفيق | مشرف متابعة - تطبيق ويب محلي لإدارة ومتابعة الطلاب عبر واتساب">
+    <meta name="author" content="DR.Mouhmed">
+    <title>رفيق | مشرف متابعة - وصف تطبيق إدارة الطلاب</title>
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            /* الألوان الأساسية من التطبيق */
+            --primary-purple: #715DB8;
+            --secondary-purple: #6F6CDB;
+            --success-green: #19BB85;
+            --warning-orange: #F39F19;
+            --white-bg: #FDFDFE;
+            --light-gray: #EFF2F6;
+            --medium-gray: #D1CED0;
+            --blue-gray: #A4A7D4;
+            
+            /* ألوان إضافية للتنوع */
+            --dark-purple: #5a4a96;
+            --light-purple: #e8e4f3;
+            --accent-pink: #e91e63;
+            --accent-blue: #2196f3;
+            --text-dark: #2c3e50;
+            --text-light: #6b7280;
+            --danger-red: #ef4444;
+            
+            /* تأثيرات */
+            --border-radius: 16px;
+            --border-radius-sm: 8px;
+            --box-shadow: 0 2px 8px rgba(113, 93, 184, 0.1);
+            --box-shadow-md: 0 4px 12px rgba(113, 93, 184, 0.15);
+            --box-shadow-lg: 0 8px 24px rgba(113, 93, 184, 0.2);
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        body {
+            font-family: 'Cairo', sans-serif;
+            background: linear-gradient(135deg, var(--light-gray) 0%, #ffffff 50%, var(--light-purple) 100%);
+            background-attachment: fixed;
+            color: var(--text-dark);
+            line-height: 1.8;
+            padding-top: 70px;
+            overflow-x: hidden;
+        }
+
+        /* Navbar - محسّن للموبايل */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(135deg, var(--primary-purple) 0%, var(--secondary-purple) 100%);
+            padding: 1rem 5%;
+            box-shadow: var(--box-shadow-lg);
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .navbar-brand {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            color: var(--white-bg);
+            font-size: clamp(1.2rem, 4vw, 1.8rem);
+            font-weight: 700;
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .navbar-brand i {
+            font-size: clamp(1.5rem, 5vw, 2rem);
+        }
+
+        .menu-toggle {
+            display: none;
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: var(--white-bg);
+            font-size: 1.5rem;
+            padding: 0.5rem 0.8rem;
+            border-radius: var(--border-radius-sm);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .menu-toggle:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .navbar-links {
+            display: flex;
+            gap: clamp(0.5rem, 2vw, 1.5rem);
+            list-style: none;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .navbar-links a {
+            color: var(--white-bg);
+            text-decoration: none;
+            font-weight: 500;
+            transition: var(--transition);
+            padding: 0.6rem 1rem;
+            border-radius: var(--border-radius-sm);
+            font-size: clamp(0.85rem, 2vw, 1rem);
+            white-space: nowrap;
+        }
+
+        .navbar-links a:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+        }
+
+        /* Container - متجاوب */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: clamp(1rem, 3vw, 2.5rem);
+            width: 100%;
+        }
+
+        /* Hero Section - محسّن */
+        .hero {
+            background: linear-gradient(135deg, var(--primary-purple) 0%, var(--secondary-purple) 50%, var(--success-green) 100%);
+            color: var(--white-bg);
+            padding: clamp(2rem, 5vw, 4rem) clamp(1rem, 3vw, 2.5rem);
+            border-radius: var(--border-radius);
+            text-align: center;
+            margin-bottom: clamp(1.5rem, 3vw, 3rem);
+            box-shadow: var(--box-shadow-lg);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
+            animation: pulse 8s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 0.5; }
+            50% { transform: scale(1.1); opacity: 0.8; }
+        }
+
+        .hero h1 {
+            font-size: clamp(1.8rem, 5vw, 3rem);
+            font-weight: 900;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.2);
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero p {
+            font-size: clamp(1rem, 3vw, 1.3rem);
+            opacity: 0.95;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Section - محسّن للجميع */
+        .section {
+            background: var(--white-bg);
+            padding: clamp(1.5rem, 3vw, 2.5rem);
+            margin-bottom: clamp(1rem, 2vw, 2rem);
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, 
+                var(--primary-purple) 0%, 
+                var(--secondary-purple) 33%, 
+                var(--success-green) 66%, 
+                var(--warning-orange) 100%
+            );
+        }
+
+        .section:hover {
+            box-shadow: var(--box-shadow-lg);
+            transform: translateY(-5px);
+        }
+
+        .section-title {
+            font-size: clamp(1.5rem, 4vw, 2rem);
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--primary-purple), var(--secondary-purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: clamp(1rem, 2vw, 1.5rem);
+            padding-bottom: 1rem;
+            border-bottom: 3px solid var(--light-purple);
+            display: flex;
+            align-items: center;
+            gap: clamp(0.5rem, 2vw, 1rem);
+            flex-wrap: wrap;
+        }
+
+        .section-title i {
+            font-size: clamp(1.5rem, 4vw, 2.2rem);
+            background: linear-gradient(135deg, var(--warning-orange), var(--success-green));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .subsection-title {
+            font-size: clamp(1.2rem, 3vw, 1.5rem);
+            font-weight: 600;
+            color: var(--secondary-purple);
+            margin: clamp(1.5rem, 3vw, 2rem) 0 1rem 0;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            flex-wrap: wrap;
+        }
+
+        .subsection-title i {
+            color: var(--success-green);
+        }
+
+        /* Cards Grid - متجاوب تمامًا */
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr));
+            gap: clamp(1rem, 2vw, 1.5rem);
+            margin: clamp(1rem, 2vw, 2rem) 0;
+        }
+
+        .card {
+            background: linear-gradient(135deg, var(--white-bg) 0%, var(--light-purple) 100%);
+            padding: clamp(1.2rem, 3vw, 1.8rem);
+            border-radius: var(--border-radius);
+            border-right: 5px solid var(--primary-purple);
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--success-green), var(--warning-orange));
+            transition: width 0.4s ease;
+        }
+
+        .card:hover::after {
+            width: 100%;
+        }
+
+        .card:nth-child(odd) {
+            border-right-color: var(--secondary-purple);
+        }
+
+        .card:nth-child(3n) {
+            border-right-color: var(--success-green);
+        }
+
+        .card:nth-child(4n) {
+            border-right-color: var(--warning-orange);
+        }
+
+        .card:hover {
+            transform: translateX(-5px) translateY(-5px);
+            box-shadow: var(--box-shadow-lg);
+        }
+
+        .card h3 {
+            color: var(--primary-purple);
+            font-size: clamp(1.1rem, 2.5vw, 1.3rem);
+            font-weight: 700;
+            margin-bottom: 0.8rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .card ul {
+            margin-right: clamp(1rem, 2vw, 1.5rem);
+        }
+
+        .card ul li {
+            margin-bottom: 0.6rem;
+            color: var(--text-dark);
+            font-size: clamp(0.9rem, 2vw, 1rem);
+        }
+
+        /* Table - متجاوب */
+        .table-wrapper {
+            overflow-x: auto;
+            margin: clamp(1rem, 2vw, 2rem) 0;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+        }
+
+        table {
+            width: 100%;
+            min-width: 500px;
+            border-collapse: collapse;
+            background: var(--white-bg);
+        }
+
+        thead {
+            background: linear-gradient(135deg, var(--primary-purple) 0%, var(--secondary-purple) 100%);
+            color: var(--white-bg);
+        }
+
+        th {
+            padding: clamp(0.8rem, 2vw, 1.2rem);
+            text-align: right;
+            font-weight: 700;
+            font-size: clamp(0.9rem, 2vw, 1.1rem);
+            white-space: nowrap;
+        }
+
+        td {
+            padding: clamp(0.8rem, 2vw, 1.2rem);
+            border-bottom: 1px solid var(--medium-gray);
+            text-align: right;
+            font-size: clamp(0.85rem, 2vw, 1rem);
+        }
+
+        tbody tr {
+            transition: var(--transition);
+        }
+
+        tbody tr:nth-child(odd) {
+            background: rgba(113, 93, 184, 0.03);
+        }
+
+        tbody tr:hover {
+            background: linear-gradient(90deg, var(--light-purple) 0%, var(--white-bg) 100%);
+            transform: scale(1.01);
+        }
+
+        /* Lists */
+        ul, ol {
+            margin: 1rem 0 1rem clamp(1rem, 3vw, 2rem);
+        }
+
+        li {
+            margin-bottom: 0.8rem;
+            line-height: 1.8;
+            font-size: clamp(0.9rem, 2vw, 1rem);
+        }
+
+        /* Highlight Box */
+        .highlight-box {
+            background: linear-gradient(135deg, 
+                var(--light-purple) 0%, 
+                rgba(111, 108, 219, 0.1) 50%, 
+                rgba(25, 187, 133, 0.1) 100%
+            );
+            padding: clamp(1.2rem, 3vw, 1.8rem);
+            border-radius: var(--border-radius);
+            border-right: 5px solid var(--secondary-purple);
+            margin: clamp(1rem, 2vw, 1.5rem) 0;
+            box-shadow: var(--box-shadow);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .highlight-box::before {
+            content: '💡';
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            font-size: 2rem;
+            opacity: 0.3;
+        }
+
+        .highlight-box strong {
+            color: var(--primary-purple);
+            font-size: clamp(1rem, 2.5vw, 1.2rem);
+        }
+
+        .highlight-box p {
+            font-size: clamp(0.9rem, 2vw, 1rem);
+        }
+
+        /* Code Block */
+        pre {
+            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+            color: #ecf0f1;
+            padding: clamp(1rem, 2vw, 1.5rem);
+            border-radius: var(--border-radius);
+            overflow-x: auto;
+            margin: clamp(1rem, 2vw, 1.5rem) 0;
+            font-family: 'Courier New', monospace;
+            box-shadow: var(--box-shadow-md);
+            font-size: clamp(0.8rem, 1.5vw, 0.95rem);
+            border-right: 4px solid var(--success-green);
+        }
+
+        code {
+            color: var(--success-green);
+            background: rgba(25, 187, 133, 0.1);
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            font-size: clamp(0.85rem, 1.8vw, 0.95rem);
+        }
+
+        /* Badges */
+        .badge {
+            display: inline-block;
+            padding: 0.4rem 0.8rem;
+            background: var(--primary-purple);
+            color: var(--white-bg);
+            border-radius: 20px;
+            font-size: clamp(0.8rem, 1.8vw, 0.9rem);
+            font-weight: 600;
+            margin: 0.2rem;
+            transition: var(--transition);
+        }
+
+        .badge:hover {
+            transform: scale(1.05);
+            box-shadow: var(--box-shadow-md);
+        }
+
+        .badge.success {
+            background: linear-gradient(135deg, var(--success-green), #16a974);
+        }
+
+        .badge.warning {
+            background: linear-gradient(135deg, var(--warning-orange), #e89510);
+        }
+
+        .badge.danger {
+            background: linear-gradient(135deg, var(--danger-red), #dc2626);
+        }
+
+        /* Accordion - محسّن */
+        .accordion-item {
+            background: var(--white-bg);
+            margin-bottom: 1rem;
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            box-shadow: var(--box-shadow);
+            border: 2px solid transparent;
+            transition: var(--transition);
+        }
+
+        .accordion-item:hover {
+            border-color: var(--primary-purple);
+        }
+
+        .accordion-header {
+            background: linear-gradient(135deg, var(--primary-purple) 0%, var(--secondary-purple) 100%);
+            color: var(--white-bg);
+            padding: clamp(1rem, 2vw, 1.2rem) clamp(1rem, 3vw, 1.5rem);
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 600;
+            font-size: clamp(1rem, 2.5vw, 1.2rem);
+            transition: var(--transition);
+        }
+
+        .accordion-header:hover {
+            background: linear-gradient(135deg, var(--secondary-purple) 0%, var(--success-green) 100%);
+        }
+
+        .accordion-header i {
+            transition: transform 0.3s ease;
+            font-size: 1.2rem;
+        }
+
+        .accordion-header.active {
+            background: linear-gradient(135deg, var(--success-green) 0%, var(--warning-orange) 100%);
+        }
+
+        .accordion-header.active i {
+            transform: rotate(180deg);
+        }
+
+        .accordion-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease;
+            padding: 0 clamp(1rem, 3vw, 1.5rem);
+            background: linear-gradient(180deg, var(--light-gray) 0%, var(--white-bg) 100%);
+        }
+
+        .accordion-content.active {
+            max-height: 5000px;
+            padding: clamp(1rem, 2vw, 1.5rem);
+        }
+
+        /* Footer - محسّن */
+        .footer {
+            background: linear-gradient(135deg, 
+                var(--primary-purple) 0%, 
+                var(--secondary-purple) 33%, 
+                var(--success-green) 66%, 
+                var(--warning-orange) 100%
+            );
+            color: var(--white-bg);
+            padding: clamp(2rem, 4vw, 3rem) 5%;
+            margin-top: clamp(2rem, 4vw, 4rem);
+            border-radius: var(--border-radius) var(--border-radius) 0 0;
+            box-shadow: var(--box-shadow-lg);
+        }
+
+        .footer-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .footer-section {
+            margin-bottom: clamp(1.5rem, 3vw, 2rem);
+        }
+
+        .footer-section h3 {
+            font-size: clamp(1.2rem, 3vw, 1.5rem);
+            font-weight: 700;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .footer-section p {
+            font-size: clamp(0.95rem, 2vw, 1.1rem);
+            margin: 0.5rem 0;
+            opacity: 0.95;
+        }
+
+        .footer-link {
+            color: var(--white-bg);
+            text-decoration: none;
+            font-weight: 600;
+            transition: var(--transition);
+            background: rgba(255, 255, 255, 0.1);
+            padding: 0.3rem 0.8rem;
+            border-radius: var(--border-radius-sm);
+            display: inline-block;
+            margin-top: 0.5rem;
+        }
+
+        .footer-link:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: scale(1.05);
+        }
+
+        .footer-divider {
+            height: 2px;
+            background: rgba(255, 255, 255, 0.3);
+            margin: clamp(1.5rem, 3vw, 2rem) auto;
+            max-width: 200px;
+            border-radius: 2px;
+        }
+
+        .footer-rights {
+            font-size: clamp(0.85rem, 1.8vw, 1rem);
+            opacity: 0.9;
+            margin-top: 2rem;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        /* Scroll to Top Button */
+        .scroll-top {
+            position: fixed;
+            bottom: 30px;
+            left: 30px;
+            background: linear-gradient(135deg, var(--primary-purple), var(--secondary-purple));
+            color: var(--white-bg);
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: var(--box-shadow-lg);
+            opacity: 0;
+            transition: var(--transition);
+            z-index: 999;
+        }
+
+        .scroll-top.visible {
+            opacity: 1;
+        }
+
+        .scroll-top:hover {
+            background: linear-gradient(135deg, var(--success-green), var(--warning-orange));
+            transform: translateY(-5px) scale(1.1);
+        }
+
+        /* Responsive للموبايل */
+        @media (max-width: 768px) {
+            .navbar {
+                padding: 1rem 3%;
+            }
+
+            .menu-toggle {
+                display: block;
+            }
+
+            .navbar-links {
+                display: none;
+                width: 100%;
+                flex-direction: column;
+                gap: 0.5rem;
+                margin-top: 1rem;
+                background: rgba(113, 93, 184, 0.95);
+                padding: 1rem;
+                border-radius: var(--border-radius-sm);
+            }
+
+            .navbar-links.active {
+                display: flex;
+            }
+
+            .navbar-links a {
+                width: 100%;
+                text-align: center;
+                padding: 0.8rem;
+            }
+
+            .section-title {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .scroll-top {
+                width: 45px;
+                height: 45px;
+                bottom: 20px;
+                left: 20px;
+            }
+
+            .cards-grid {
+                grid-template-columns: 1fr;
+            }
+
+            table {
+                font-size: 0.85rem;
+            }
+        }
+
+        /* Responsive للتابلت */
+        @media (min-width: 769px) and (max-width: 1024px) {
+            .cards-grid {
+                grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            }
+
+            .navbar-links {
+                gap: 1rem;
+            }
+        }
+
+        /* Responsive للشاشات الكبيرة جداً */
+        @media (min-width: 1600px) {
+            .container {
+                max-width: 1600px;
+            }
+
+            .cards-grid {
+                grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            }
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .section {
+            animation: fadeIn 0.6s ease-out;
+        }
+
+        .card {
+            animation: slideIn 0.5s ease-out;
+        }
+
+        /* تأثيرات إضافية للألوان */
+        .color-accent-1 {
+            background: linear-gradient(135deg, var(--primary-purple), var(--secondary-purple));
+        }
+
+        .color-accent-2 {
+            background: linear-gradient(135deg, var(--success-green), var(--secondary-purple));
+        }
+
+        .color-accent-3 {
+            background: linear-gradient(135deg, var(--warning-orange), var(--success-green));
+        }
+
+        .color-accent-4 {
+            background: linear-gradient(135deg, var(--accent-pink), var(--warning-orange));
+        }
+
+        /* Loading Animation */
+        @keyframes shimmer {
+            0% { background-position: -1000px 0; }
+            100% { background-position: 1000px 0; }
+        }
+
+        .loading-shimmer {
+            animation: shimmer 2s infinite;
+            background: linear-gradient(to right, 
+                var(--light-purple) 0%, 
+                var(--white-bg) 50%, 
+                var(--light-purple) 100%
+            );
+            background-size: 1000px 100%;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="navbar-brand">
+            <i class="fas fa-mobile-alt"></i>
+            <span>رفيق | مشرف متابعة</span>
+        </div>
+        <button class="menu-toggle" onclick="toggleMenu()">
+            <i class="fas fa-bars"></i>
+        </button>
+        <ul class="navbar-links" id="navbarLinks">
+            <li><a href="#overview"><i class="fas fa-home"></i> نظرة عامة</a></li>
+            <li><a href="#features"><i class="fas fa-star"></i> المميزات</a></li>
+            <li><a href="#technical"><i class="fas fa-code"></i> الجانب التقني</a></li>
+            <li><a href="#footer"><i class="fas fa-info-circle"></i> معلومات المطور</a></li>
+        </ul>
+    </nav>
+
+    <!-- Hero Section -->
+    <div class="hero">
+        <h1>📱 وصف تطبيق "رفيق | مشرف متابعة"</h1>
+        <p>رفيقك في رحلة المتابعة التربوية الاحترافية 🌸</p>
+    </div>
+
+    <!-- Main Container -->
+    <div class="container">
+
+        <!-- القسم الأول -->
+        <section class="section" id="overview">
+            <h2 class="section-title">
+                <i class="fas fa-clipboard-list"></i>
+                📋 القسم الأول: الجانب الظاهري (من منظور المستخدم)
+            </h2>
+
+            <div class="subsection">
+                <h3 class="subsection-title">🎯 ما هو التطبيق؟</h3>
+                <div class="highlight-box">
+                    <p><strong>رفيق | مشرف متابعة</strong> هو تطبيق ويب محلي مصمم خصيصًا للمشرفين التربويين والمعلمين وأصحاب المراكز التعليمية الذين يتابعون طلابهم عبر <strong>واتساب</strong>.</p>
+                    <p>يوفر التطبيق واجهة عربية حديثة وسهلة الاستخدام لإدارة بيانات الطلاب، إرسال الرسائل الفردية والجماعية، تتبع التواصل، وتنظيم المتابعة اليومية بشكل احترافي ومنظم.</p>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3 class="subsection-title">💡 ما المشكلة التي يحلها؟</h3>
+                <p>يواجه المشرفون التربويون والمعلمون تحديات يومية في:</p>
+                <ul>
+                    <li><strong>إدارة عدد كبير من الطلاب</strong> وبياناتهم بشكل مبعثر (دفاتر، جداول Excel، ملفات متفرقة)</li>
+                    <li><strong>صعوبة إرسال الرسائل الجماعية</strong> عبر واتساب لعشرات الطلاب يدويًا</li>
+                    <li><strong>نسيان متابعة الطلاب</strong> الذين لم يتم التواصل معهم منذ فترة</li>
+                    <li><strong>عدم وجود سجل منظم</strong> للرسائل والمتابعات السابقة</li>
+                    <li><strong>استهلاك الوقت والجهد</strong> في البحث عن أرقام الطلاب ونسخ الرسائل يدويًا</li>
+                </ul>
+                <div class="highlight-box">
+                    <p><strong>رفيق</strong> يحل هذه المشاكل من خلال توفير نظام متكامل لإدارة العلاقة بين المشرف والطالب عبر واتساب.</p>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3 class="subsection-title">👥 الفئة المستهدفة</h3>
+                <div class="cards-grid">
+                    <div class="card">
+                        <h3><i class="fas fa-chalkboard-teacher"></i> المشرفون التربويون</h3>
+                        <p>في المدارس والمراكز التعليمية</p>
+                    </div>
+                    <div class="card">
+                        <h3><i class="fas fa-quran"></i> معلمو التحفيظ</h3>
+                        <p>والدورات الشرعية</p>
+                    </div>
+                    <div class="card">
+                        <h3><i class="fas fa-user-graduate"></i> المدربون</h3>
+                        <p>للدورات التدريبية والتعليمية</p>
+                    </div>
+                    <div class="card">
+                        <h3><i class="fas fa-university"></i> المرشدون الأكاديميون</h3>
+                        <p>في الجامعات</p>
+                    </div>
+                    <div class="card">
+                        <h3><i class="fas fa-school"></i> أصحاب المراكز</h3>
+                        <p>التعليمية الخاصة</p>
+                    </div>
+                    <div class="card">
+                        <h3><i class="fas fa-users"></i> أي مدير</h3>
+                        <p>يدير مجموعة ويتابعهم عبر واتساب</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- المميزات -->
+        <section class="section" id="features">
+            <h2 class="section-title">
+                <i class="fas fa-star"></i>
+                ✨ أهم المميزات والوظائف
+            </h2>
+
+            <div class="accordion-item">
+                <div class="accordion-header" onclick="toggleAccordion(this)">
+                    <span><i class="fas fa-user-graduate"></i> 1. إدارة الطلاب 👨‍🎓</span>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="accordion-content">
+                    <ul>
+                        <li>إضافة، تعديل، وحذف بيانات الطلاب</li>
+                        <li>تصنيف الطلاب حسب الحالة (نشط، يحتاج متابعة، غير نشط)</li>
+                        <li>إضافة وسوم (Tags) لتنظيم الطلاب</li>
+                        <li>استيراد جماعي للطلاب من قائمة أرقام</li>
+                        <li>بحث وفلترة سريعة</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="accordion-item">
+                <div class="accordion-header" onclick="toggleAccordion(this)">
+                    <span><i class="fas fa-comment-dots"></i> 2. إرسال رسائل واتساب 💬</span>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="accordion-content">
+                    <ul>
+                        <li><strong>إرسال رسائل فردية</strong> مباشرة لطالب معين</li>
+                        <li><strong>إرسال رسائل جماعية</strong> لمجموعة مختارة من الطلاب</li>
+                        <li><strong>قوالب رسائل جاهزة</strong> (تشجيع، تذكير، متابعة، تحفيز)</li>
+                        <li><strong>معاينة الرسالة</strong> قبل الإرسال</li>
+                        <li><strong>استخدام متغيرات ديناميكية</strong> مثل <code>{student_name}</code></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="accordion-item">
+                <div class="accordion-header" onclick="toggleAccordion(this)">
+                    <span><i class="fas fa-tasks"></i> 3. متابعة التواصل 📋</span>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="accordion-content">
+                    <ul>
+                        <li>تسجيل تاريخ آخر تواصل مع كل طالب</li>
+                        <li>عرض الطلاب الذين لم يتم التواصل معهم منذ 7 أيام</li>
+                        <li>عرض الطلاب المتأخرين (14 يوم بدون تواصل)</li>
+                        <li>سجل كامل للرسائل المرسلة</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="accordion-item">
+                <div class="accordion-header" onclick="toggleAccordion(this)">
+                    <span><i class="fas fa-chart-line"></i> 4. لوحة تحكم شاملة 📊</span>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="accordion-content">
+                    <ul>
+                        <li>إحصائيات سريعة (عدد الطلاب، الرسائل، المتابعات)</li>
+                        <li>نشاطات حديثة</li>
+                        <li>قوائم سريعة للمتابعة</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="accordion-item">
+                <div class="accordion-header" onclick="toggleAccordion(this)">
+                    <span><i class="fas fa-palette"></i> 5. واجهة عربية جميلة 🌸</span>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="accordion-content">
+                    <ul>
+                        <li>تصميم عصري وجذاب</li>
+                        <li>ألوان مريحة ومنظمة</li>
+                        <li>رموز تعبيرية (Emojis) في كل مكان</li>
+                        <li>استجابة كاملة على جميع الأجهزة</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3 class="subsection-title">🎨 تجربة المستخدم داخل التطبيق</h3>
+                <div class="highlight-box">
+                    <p>عند فتح التطبيق، يظهر <strong>شريط جانبي أرجواني جميل</strong> يحتوي على:</p>
+                    <ul>
+                        <li>🏠 الرئيسية</li>
+                        <li>👨‍🎓 الطلاب</li>
+                        <li>💬 المحادثات</li>
+                        <li>📢 إرسال جماعي</li>
+                        <li>✨ القوالب</li>
+                        <li>📋 المتابعة</li>
+                        <li>💚 واتساب</li>
+                        <li>📊 الإحصائيات</li>
+                        <li>⚙️ الإعدادات</li>
+                    </ul>
+                </div>
+
+                <h4 style="margin-top: 2rem; color: var(--secondary-purple); font-size: clamp(1.1rem, 2.5vw, 1.2rem);"><strong>رحلة المستخدم النموذجية:</strong></h4>
+                <ol>
+                    <li><strong>الاتصال بواتساب</strong>: المشرف يفتح صفحة واتساب ويمسح QR Code مرة واحدة</li>
+                    <li><strong>إضافة الطلاب</strong>: يضيف طلابه يدويًا أو يستورد قائمة أرقام جماعية</li>
+                    <li><strong>إنشاء قوالب</strong>: ينشئ قوالب رسائل جاهزة (مثل: "بارك الله فيك يا {student_name}...")</li>
+                    <li><strong>الإرسال الجماعي</strong>: يختار مجموعة طلاب، يختار قالب أو يكتب رسالة، ويرسل للجميع</li>
+                    <li><strong>المتابعة اليومية</strong>: يفتح صفحة المتابعة ليرى من يحتاج تواصل ويرسل لهم مباشرة</li>
+                </ol>
+            </div>
+
+            <div class="subsection">
+                <h3 class="subsection-title">⚡ كيف يسهّل إدارة العمل والمتابعة</h3>
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>بدون رفيق</th>
+                                <th>مع رفيق</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>البحث في دفتر أو Excel عن رقم الطالب</td>
+                                <td>البحث الفوري بالاسم أو الرقم</td>
+                            </tr>
+                            <tr>
+                                <td>نسخ ولصق الرسالة 40 مرة يدويًا</td>
+                                <td>إرسال لـ 40 طالب بضغطة واحدة</td>
+                            </tr>
+                            <tr>
+                                <td>نسيان متابعة بعض الطلاب</td>
+                                <td>تنبيهات تلقائية للطلاب المتأخرين</td>
+                            </tr>
+                            <tr>
+                                <td>ضياع سجلات الرسائل</td>
+                                <td>سجل كامل ومنظم لكل رسالة</td>
+                            </tr>
+                            <tr>
+                                <td>استهلاك ساعات في العمل اليدوي</td>
+                                <td>إنجاز نفس المهمة في دقائق</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- القسم الثاني: التقني -->
+        <section class="section" id="technical">
+            <h2 class="section-title">
+                <i class="fas fa-cogs"></i>
+                🔧 القسم الثاني: الجانب التقني
+            </h2>
+
+            <div class="subsection">
+                <h3 class="subsection-title">🏗️ البنية التقنية للتطبيق</h3>
+                <div class="highlight-box">
+                    <p><strong>رفيق</strong> مبني على معمارية <strong>ويب محلية (Local Web App)</strong> تجمع بين:</p>
+                    <ul>
+                        <li><strong>Backend</strong> قوي ومستقر</li>
+                        <li><strong>Frontend</strong> جميل وتفاعلي</li>
+                        <li><strong>Automation Engine</strong> لإدارة واتساب ويب</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3 class="subsection-title">💻 نوع المنصة</h3>
+                <div class="highlight-box">
+                    <p><strong>تطبيق ويب محلي (Local Web Application)</strong></p>
+                    <ul>
+                        <li>يعمل على جهاز المستخدم مباشرة</li>
+                        <li>يُفتح في المتصفح عبر <code>http://127.0.0.1:5000</code></li>
+                        <li><strong>لا يحتاج إنترنت</strong> لإدارة البيانات (فقط لإرسال الرسائل)</li>
+                        <li><strong>لا توجد خوادم خارجية</strong> (البيانات محفوظة محليًا فقط)</li>
+                    </ul>
+                </div>
+
+                <h4 style="margin-top: 1.5rem; color: var(--success-green); font-size: clamp(1rem, 2.5vw, 1.1rem);"><strong>مزايا هذا النموذج:</strong></h4>
+                <div class="cards-grid">
+                    <div class="card">
+                        <h3>✅ خصوصية كاملة</h3>
+                        <p>البيانات لا تغادر جهازك أبدًا</p>
+                    </div>
+                    <div class="card">
+                        <h3>✅ لا رسوم اشتراك</h3>
+                        <p>لا توجد رسوم شهرية</p>
+                    </div>
+                    <div class="card">
+                        <h3>✅ سريع ومستقر</h3>
+                        <p>أداء عالي ومستقر</p>
+                    </div>
+                    <div class="card">
+                        <h3>✅ سهل التثبيت</h3>
+                        <p>سهل التثبيت والتشغيل</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3 class="subsection-title">⚙️ التقنيات المستخدمة</h3>
+                
+                <h4 style="margin-top: 1.5rem; color: var(--primary-purple); font-size: clamp(1rem, 2.5vw, 1.1rem);"><strong>Backend (الخلفية)</strong></h4>
+                <ul>
+                    <li><strong>Python 3.10+</strong> - لغة البرمجة الرئيسية</li>
+                    <li><strong>Flask</strong> - إطار عمل الويب الخفيف</li>
+                    <li><strong>SQLAlchemy</strong> - للتعامل مع قاعدة البيانات بشكل احترافي</li>
+                    <li><strong>Playwright</strong> - لأتمتة واتساب ويب</li>
+                </ul>
+
+                <h4 style="margin-top: 1.5rem; color: var(--secondary-purple); font-size: clamp(1rem, 2.5vw, 1.1rem);"><strong>Frontend (الواجهة)</strong></h4>
+                <ul>
+                    <li><strong>HTML5</strong> - البنية الأساسية للصفحات</li>
+                    <li><strong>CSS3</strong> - التصميم والألوان والتنسيق</li>
+                    <li><strong>JavaScript (jQuery)</strong> - التفاعل الديناميكي</li>
+                    <li><strong>Font Awesome</strong> - الأيقونات</li>
+                    <li><strong>Google Fonts (Cairo)</strong> - خط عربي جميل</li>
+                </ul>
+
+                <h4 style="margin-top: 1.5rem; color: var(--success-green); font-size: clamp(1rem, 2.5vw, 1.1rem);"><strong>Automation (الأتمتة)</strong></h4>
+                <ul>
+                    <li><strong>Playwright (Chromium)</strong> - فتح واتساب ويب وإرسال الرسائل تلقائيًا</li>
+                    <li><strong>Threading</strong> - لإدارة العمليات بالتوازي</li>
+                    <li><strong>Session Management</strong> - حفظ جلسة واتساب</li>
+                </ul>
+            </div>
+
+            <div class="subsection">
+                <h3 class="subsection-title">💾 نظام قاعدة البيانات</h3>
+                <div class="highlight-box">
+                    <p><strong>SQLite</strong> - قاعدة بيانات محلية خفيفة وسريعة</p>
+                </div>
+
+                <h4 style="margin-top: 1.5rem; color: var(--warning-orange); font-size: clamp(1rem, 2.5vw, 1.1rem);"><strong>هيكل الجداول الرئيسية:</strong></h4>
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>الجدول</th>
+                                <th>الوصف</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><code>students</code></td>
+                                <td>بيانات الطلاب (الاسم، الرقم، الحالة، الوسوم، آخر تواصل)</td>
+                            </tr>
+                            <tr>
+                                <td><code>messages</code></td>
+                                <td>سجل الرسائل المرسلة (الطالب، المحتوى، التاريخ، الحالة)</td>
+                            </tr>
+                            <tr>
+                                <td><code>templates</code></td>
+                                <td>قوالب الرسائل الجاهزة (الاسم، الفئة، المحتوى)</td>
+                            </tr>
+                            <tr>
+                                <td><code>settings</code></td>
+                                <td>إعدادات التطبيق (الفاصل الزمني، الإعدادات العامة)</td>
+                            </tr>
+                            <tr>
+                                <td><code>activities</code></td>
+                                <td>سجل النشاطات (إضافة طالب، حذف، إرسال)</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <p style="margin-top: 1rem;"><strong>مسار قاعدة البيانات:</strong></p>
+                <pre><code>data/rafiq.db</code></pre>
+            </div>
+
+            <div class="subsection">
+                <h3 class="subsection-title">🔐 آلية إدارة الصلاحيات</h3>
+                <div class="highlight-box">
+                    <p><strong>النسخة الحالية:</strong></p>
+                    <p>التطبيق مصمم <strong>لمستخدم واحد فقط</strong> (مشرف واحد).</p>
+                </div>
+
+                <h4 style="margin-top: 1.5rem; color: var(--primary-purple); font-size: clamp(1rem, 2.5vw, 1.1rem);"><strong>التطوير المستقبلي (إن طُلب):</strong></h4>
+                <p>يمكن إضافة نظام صلاحيات متعدد:</p>
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>الدور</th>
+                                <th>الصلاحيات</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>المشرف الرئيسي</strong></td>
+                                <td>كامل الصلاحيات (إضافة، حذف، إرسال، إعدادات)</td>
+                            </tr>
+                            <tr>
+                                <td><strong>المساعد</strong></td>
+                                <td>إرسال رسائل وعرض الطلاب فقط</td>
+                            </tr>
+                            <tr>
+                                <td><strong>مراقب</strong></td>
+                                <td>عرض الإحصائيات والتقارير فقط</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3 class="subsection-title">🔗 التكاملات المحتملة</h3>
+                
+                <h4 style="margin-top: 1.5rem; color: var(--success-green); font-size: clamp(1rem, 2.5vw, 1.1rem);"><strong>✅ موجود حاليًا:</strong></h4>
+                <ul>
+                    <li><strong>WhatsApp Web API</strong> (عبر Playwright)</li>
+                    <li><strong>حفظ جلسة واتساب</strong> محليًا</li>
+                </ul>
+
+                <h4 style="margin-top: 1.5rem; color: var(--secondary-purple); font-size: clamp(1rem, 2.5vw, 1.1rem);"><strong>🚀 قابل للإضافة مستقبلًا:</strong></h4>
+                <ul>
+                    <li><strong>تصدير التقارير PDF/Excel</strong></li>
+                    <li><strong>إشعارات سطح المكتب</strong> عند استلام رسالة</li>
+                    <li><strong>تكامل مع Google Sheets</strong> لاستيراد الطلاب</li>
+                    <li><strong>ربط مع Telegram Bot</strong> للتنبيهات</li>
+                    <li><strong>تقارير أسبوعية تلقائية</strong></li>
+                    <li><strong>نسخ احتياطي تلقائي للسحابة</strong> (Google Drive/Dropbox)</li>
+                </ul>
+            </div>
+
+            <div class="subsection">
+                <h3 class="subsection-title">🛡️ مستوى الأمان وحماية البيانات</h3>
+                
+                <h4 style="margin-top: 1.5rem; color: var(--success-green); font-size: clamp(1rem, 2.5vw, 1.1rem);"><strong>✅ الأمان المُطبّق:</strong></h4>
+                
+                <div class="card">
+                    <h3>1. خصوصية كاملة:</h3>
+                    <ul>
+                        <li>جميع البيانات محفوظة <strong>محليًا فقط</strong> على جهاز المستخدم</li>
+                        <li>لا توجد خوادم خارجية</li>
+                        <li>لا تُرسل أي بيانات لأي جهة</li>
+                    </ul>
+                </div>
+
+                <div class="card">
+                    <h3>2. حماية جلسة واتساب:</h3>
+                    <ul>
+                        <li>الجلسة محفوظة بشكل آمن في مجلد <code>data/whatsapp_session</code></li>
+                        <li>لا يتم تخزين كلمات مرور واتساب</li>
+                    </ul>
+                </div>
+
+                <div class="card">
+                    <h3>3. عدم استخدام واجهات غير رسمية:</h3>
+                    <ul>
+                        <li>التطبيق يستخدم <strong>واتساب ويب الرسمي</strong></li>
+                        <li>لا توجد واجهات برمجية غير موثوقة</li>
+                    </ul>
+                </div>
+
+                <div class="card">
+                    <h3>4. نسخ احتياطي يدوي:</h3>
+                    <ul>
+                        <li>المستخدم يمكنه نسخ ملف <code>data/rafiq.db</code> في أي وقت</li>
+                    </ul>
+                </div>
+
+                <h4 style="margin-top: 1.5rem; color: var(--warning-orange); font-size: clamp(1rem, 2.5vw, 1.1rem);"><strong>🔒 توصيات إضافية (للإنتاج):</strong></h4>
+                <ul>
+                    <li>تشفير قاعدة البيانات المحلية</li>
+                    <li>إضافة كلمة مرور لفتح التطبيق</li>
+                    <li>نسخ احتياطي تلقائي مشفر</li>
+                </ul>
+            </div>
+
+            <div class="subsection">
+                <h3 class="subsection-title">📦 متطلبات التشغيل</h3>
+                
+                <h4 style="margin-top: 1.5rem; color: var(--primary-purple); font-size: clamp(1rem, 2.5vw, 1.1rem);"><strong>الحد الأدنى:</strong></h4>
+                <ul>
+                    <li><strong>نظام التشغيل:</strong> Windows 10+, macOS, Linux</li>
+                    <li><strong>Python:</strong> 3.8 أو أحدث</li>
+                    <li><strong>المتصفح:</strong> Chrome/Edge (مثبت تلقائيًا مع Playwright)</li>
+                    <li><strong>الذاكرة:</strong> 4 GB RAM</li>
+                    <li><strong>المساحة:</strong> 500 MB مساحة حرة</li>
+                </ul>
+
+                <h4 style="margin-top: 1.5rem; color: var(--secondary-purple); font-size: clamp(1rem, 2.5vw, 1.1rem);"><strong>التثبيت:</strong></h4>
+                <pre><code>pip install -r requirements.txt
+playwright install chromium
+python main.py</code></pre>
+
+                <h4 style="margin-top: 1.5rem; color: var(--success-green); font-size: clamp(1rem, 2.5vw, 1.1rem);"><strong>بدء التشغيل:</strong></h4>
+                <div class="highlight-box">
+                    <p>يفتح التطبيق تلقائيًا في المتصفح على <code>http://127.0.0.1:5000</code></p>
+                </div>
+            </div>
+        </section>
+
+        <!-- القيمة المضافة -->
+        <section class="section">
+            <h2 class="section-title">
+                <i class="fas fa-gem"></i>
+                🌟 القيمة المضافة للتطبيق
+            </h2>
+            <div class="highlight-box">
+                <p>في عصر <strong>التحول الرقمي</strong> و<strong>التعليم عن بُعد</strong>، أصبحت المتابعة الإلكترونية ضرورة لا رفاهية. <strong>رفيق | مشرف متابعة</strong> يوفر حلاً <strong>محليًا، آمنًا، وبسيطًا</strong> للمشرفين التربويين لإدارة طلابهم بطريقة احترافية دون الحاجة لأنظمة معقدة أو اشتراكات شهرية مكلفة.</p>
+            </div>
+
+            <p style="margin-top: 2rem;">التطبيق يجمع بين:</p>
+            <div class="cards-grid">
+                <div class="card">
+                    <h3>✅ البساطة</h3>
+                    <p>في الاستخدام</p>
+                </div>
+                <div class="card">
+                    <h3>✅ القوة</h3>
+                    <p>في الأداء</p>
+                </div>
+                <div class="card">
+                    <h3>✅ الخصوصية</h3>
+                    <p>الكاملة</p>
+                </div>
+                <div class="card">
+                    <h3>✅ التوفير</h3>
+                    <p>في الوقت والجهد</p>
+                </div>
+            </div>
+
+            <div class="highlight-box" style="margin-top: 2rem;">
+                <p>مما يجعله <strong>الخيار الأمثل</strong> لكل مشرف يبحث عن أداة عملية لتنظيم متابعاته اليومية بكفاءة واحترافية.</p>
+            </div>
+
+            <div style="text-align: center; margin-top: 2rem; padding: clamp(1.5rem, 3vw, 2rem); background: linear-gradient(135deg, var(--light-purple) 0%, rgba(111, 108, 219, 0.2) 100%); border-radius: var(--border-radius); border: 2px solid var(--primary-purple);">
+                <p style="font-size: clamp(1rem, 2.5vw, 1.2rem); color: var(--primary-purple);"><strong>📧 للاستفسار أو التجربة:</strong></p>
+                <p style="margin-top: 1rem; font-size: clamp(0.9rem, 2vw, 1rem);">التطبيق <strong>مفتوح المصدر</strong> وقابل للتخصيص حسب احتياجاتك الخاصة.</p>
+            </div>
+
+            <div style="text-align: center; margin-top: 3rem; padding: clamp(1.5rem, 3vw, 2rem); background: linear-gradient(135deg, var(--primary-purple) 0%, var(--secondary-purple) 50%, var(--success-green) 100%); border-radius: var(--border-radius); color: var(--white-bg); box-shadow: var(--box-shadow-lg);">
+                <h3 style="font-size: clamp(1.3rem, 3vw, 1.8rem); margin-bottom: 1rem;">✨ <strong>رفيق | مشرف متابعة</strong></h3>
+                <p style="font-size: clamp(1rem, 2.5vw, 1.2rem); opacity: 0.95;"><em>رفيقك في رحلة المتابعة التربوية الاحترافية</em> 🌸</p>
+            </div>
+        </section>
+
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer" id="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3><i class="fas fa-user-md"></i> معلومات المطور</h3>
+                <p><strong>التطبيق منشئ بواسطة DR.Mouhmed</strong></p>
+                <p>
+                    <i class="fab fa-facebook"></i> 
+                    رابط صفحة فيسبوك: 
+                    <a href="https://facebook.com/MSANGAK27" target="_blank" class="footer-link">
+                        https://facebook.com/MSANGAK27
+                    </a>
+                </p>
+            </div>
+
+            <div class="footer-divider"></div>
+
+            <div class="footer-section">
+                <h3><i class="fas fa-exclamation-triangle"></i> حالة التطبيق</h3>
+                <p style="font-size: clamp(1rem, 2vw, 1.1rem);">
+                    <span class="badge warning">⚠️ تحت الإنشاء</span>
+                </p>
+                <p style="margin-top: 0.5rem;">التطبيق لا يزال تحت الإنشاء والتحديث</p>
+            </div>
+
+            <div class="footer-divider"></div>
+
+            <div class="footer-rights">
+                <p><i class="fas fa-copyright"></i> <strong>جميع حقوق الصفحة محفوظة</strong></p>
+                <p style="margin-top: 0.5rem; font-size: clamp(0.8rem, 1.8vw, 0.9rem); opacity: 0.8;">
+                    © 2024 رفيق | مشرف متابعة - جميع الحقوق محفوظة
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scroll to Top Button -->
+    <div class="scroll-top" id="scrollTop" onclick="scrollToTop()">
+        <i class="fas fa-arrow-up"></i>
+    </div>
+
+    <!-- JavaScript -->
+    <script>
+        // Toggle Menu for Mobile
+        function toggleMenu() {
+            const navbarLinks = document.getElementById('navbarLinks');
+            navbarLinks.classList.toggle('active');
+        }
+
+        // Accordion Toggle
+        function toggleAccordion(header) {
+            const content = header.nextElementSibling;
+            const isActive = header.classList.contains('active');
+            
+            // Close all accordions
+            document.querySelectorAll('.accordion-header').forEach(h => {
+                h.classList.remove('active');
+                h.nextElementSibling.classList.remove('active');
+            });
+            
+            // Open clicked accordion if it wasn't active
+            if (!isActive) {
+                header.classList.add('active');
+                content.classList.add('active');
+            }
+        }
+
+        // Scroll to Top
+        function scrollToTop() {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        }
+
+        // Show/Hide Scroll to Top Button
+        window.addEventListener('scroll', function() {
+            const scrollTop = document.getElementById('scrollTop');
+            if (window.pageYOffset > 300) {
+                scrollTop.classList.add('visible');
+            } else {
+                scrollTop.classList.remove('visible');
+            }
+        });
+
+        // Smooth Scroll for Navigation Links
+        document.querySelectorAll('.navbar-links a').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href').substring(1);
+                const targetElement = document.getElementById(targetId);
+                if (targetElement) {
+                    const offsetTop = targetElement.offsetTop - 80;
+                    window.scrollTo({
+                        top: offsetTop,
+                        behavior: 'smooth'
+                    });
+                }
+                
+                // Close mobile menu after click
+                if (window.innerWidth <= 768) {
+                    document.getElementById('navbarLinks').classList.remove('active');
+                }
+            });
+        });
+
+        // Animation on Scroll
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver(function(entries) {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.section').forEach(section => {
+            section.style.opacity = '0';
+            section.style.transform = 'translateY(20px)';
+            section.style.transition = 'all 0.6s ease-out';
+            observer.observe(section);
+        });
+
+        // Close mobile menu when clicking outside
+        document.addEventListener('click', function(event) {
+            const navbar = document.querySelector('.navbar');
+            const navbarLinks = document.getElementById('navbarLinks');
+            const menuToggle = document.querySelector('.menu-toggle');
+            
+            if (!navbar.contains(event.target) && navbarLinks.classList.contains('active')) {
+                navbarLinks.classList.remove('active');
+            }
+        });
+
+        // Add active state to cards on scroll
+        const cardObserver = new IntersectionObserver(function(entries) {
+            entries.forEach((entry, index) => {
+                if (entry.isIntersecting) {
+                    setTimeout(() => {
+                        entry.target.style.opacity = '1';
+                        entry.target.style.transform = 'translateX(0)';
+                    }, index * 100);
+                }
+            });
+        }, { threshold: 0.2 });
+
+        document.querySelectorAll('.card').forEach(card => {
+            card.style.opacity = '0';
+            card.style.transform = 'translateX(30px)';
+            card.style.transition = 'all 0.5s ease-out';
+            cardObserver.observe(card);
+        });
+    </script>
+
+</body>
+</html>
